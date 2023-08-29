@@ -82,6 +82,8 @@ WSGI_APPLICATION = 'renewproject.wsgi.application'
 #     }
 # }
 
+AUTH_USER_MODEL = 'renewapp.CustomUser'
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
