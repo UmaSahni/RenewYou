@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_6_c)s7_9jvwx65csmp##5n^2!$0m)rz=h!$iv-7!$^zrs!66l'
+SECRET_KEY = 'django-insecure-$(i4qd-q4a-2fw(f=m2-s6eeind9&(2d01xtls!u#lc2tl1fzv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,12 +82,10 @@ WSGI_APPLICATION = 'renewproject.wsgi.application'
 #     }
 # }
 
-AUTH_USER_MODEL = 'renewapp.CustomUser'
-
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'renewyou',
+        'NAME': 'renewyourself',
         'CLIENT':{
             'host':'mongodb+srv://uma:uma@cluster0.g3tcjlo.mongodb.net/renew?retryWrites=true&w=majority',
             'username':'uma',
@@ -95,7 +93,6 @@ DATABASES = {
         }
     }
 } 
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
