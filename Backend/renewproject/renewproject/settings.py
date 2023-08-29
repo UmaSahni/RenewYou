@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'renewapp',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +75,24 @@ WSGI_APPLICATION = 'renewproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'renewyou',
+        'CLIENT':{
+            'host':'mongodb+srv://uma:uma@cluster0.g3tcjlo.mongodb.net/renew?retryWrites=true&w=majority',
+            'username':'uma',
+            'password':'uma'
+        }
     }
-}
+} 
 
 
 # Password validation
