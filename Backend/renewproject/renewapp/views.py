@@ -1,34 +1,42 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import CustomUserSerializer
-from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
+from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-def get_csrf_token(request):
-    csrf_token = get_token(request)
-    return JsonResponse({'csrfToken': csrf_token})
-@api_view(['POST'])
+from django.contrib.auth import authenticate, login
 
 
+User = get_user_model()
+
+@csrf_exempt
 def user_registration(request):
     if request.method == 'POST':
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = json.loads(request.body)
+        try:
+            user = User.objects.create_user(
+                email=data['email'],
+                password=data['password'],
+                name=data['name'],
+                weight=data['weight'],
+                height=data['height'],
+                age=data['age'],
+                sex=data['sex'],
+            )
+            return JsonResponse({"message": "User registered successfully."}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
 
-@api_view(['POST'])
+
+@csrf_exempt
 def user_login(request):
     if request.method == 'POST':
-        email = request.data.get('email')
-        password = request.data.get('password')
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
         
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
-            return Response({"message": "User logged in successfully."})
+            return JsonResponse({"message": "User logged in successfully."})
         else:
-            return Response({"message": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
+            return JsonResponse({"message": "Invalid credentials."}, status=401)
