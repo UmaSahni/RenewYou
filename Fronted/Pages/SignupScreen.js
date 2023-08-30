@@ -61,7 +61,7 @@ const SignupScreen = () => {
         value={name}
         onChangeText={setName}
       />
-      <Button title="click me" onPress={handleGET} />
+      
       <TextInput
         style={styles.input}
         placeholder="Email"

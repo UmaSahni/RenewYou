@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignupScreen from './Pages/SignupScreen';
+import Login from './Pages/Login';
+import Home from './Pages/Home';
+import Fitness from './Pages/Fitness';
 
 
 export default function App() {
@@ -10,8 +13,11 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Signup">
+      <Stack.Navigator initialRouteName='Home' >
         <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Fitness" component={Fitness} />
         {/* Other screens can be added here */}
       </Stack.Navigator>
     </NavigationContainer>
