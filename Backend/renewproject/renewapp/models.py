@@ -36,3 +36,53 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # Add related_name arguments to prevent clashes
     groups = None
     user_permissions = None
+
+
+
+class FitnessGoal(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    goal_name = models.CharField(max_length=100)
+    goal_value = models.PositiveIntegerField()
+
+#  we'll use a one-to-many relationship where a single trainer can have multiple customers.
+
+class TrainerProfile(models.Model):
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    )
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='trainer_profile')
+    name = models.CharField(max_length=100, default='New Trainer')
+    specialization = models.CharField(max_length=100)
+    experience = models.PositiveIntegerField()
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    contact_number = models.CharField(max_length=15)
+    email = models.EmailField()
+    availability = models.CharField(max_length=100, default='Weekdays')  # Example: Weekdays, Weekends
+    languages_spoken = models.CharField(max_length=100, default="English")
+    location = models.CharField(max_length=200, default="Mumbai")
+    photo = models.ImageField(upload_to='trainer_photos/', null=True, blank=True)
+
+
+    def __str__(self):
+        return self.name + "'s Trainer Profile"
+
+
+class WorkoutPlan(models.Model):
+    GOAL_CHOICES = (
+        ('Weight Loss', 'Weight Loss'),
+        ('Muscle Gain', 'Muscle Gain'),
+        ('Cardio Fitness', 'Cardio Fitness'),
+        # Add more goal choices as needed
+    )
+
+    trainer = models.ForeignKey(TrainerProfile, on_delete=models.CASCADE)
+    plan_name = models.CharField(max_length=100)
+    goal = models.CharField(max_length=20, choices=GOAL_CHOICES)
+    duration = models.PositiveIntegerField()  # Number of weeks
+    description = models.TextField()
+
+    def __str__(self):
+        return self.plan_name
