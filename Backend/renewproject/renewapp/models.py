@@ -88,16 +88,19 @@ class WorkoutPlan(models.Model):
         return self.plan_name
     
 
-class Name(models.Model):
-    name = models.CharField(max_length=100)
-
 class Meal(models.Model):
-    names = models.ManyToManyField(Name)
+    MEAL_TYPES = [
+        ('breakfast', 'Breakfast'),
+        ('lunch', 'Lunch'),
+        ('dinner', 'Dinner'),
+    ]
+
+    meal_type = models.CharField(max_length=20,default='breakfast', choices=MEAL_TYPES)
+    name = models.CharField(max_length=100, default="unknown food")
     calories = models.FloatField()
     protein = models.FloatField()
     carb = models.FloatField()
     fat = models.FloatField()
-
 class Breakfast(Meal):
     pass
 

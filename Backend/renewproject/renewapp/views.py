@@ -133,38 +133,69 @@ def create_workout_plan(request):
 
 
 from .models import Breakfast, Lunch, Dinner
-
+from .models import Meal
+@csrf_exempt
 def dashboard(request):
-    # Calculate and sum the protein, carb, and fat values from all meals
-    total_protein = 0
-    total_carb = 0
-    total_fat = 0
-    
-    # Sum up values from Breakfast
-    breakfasts = Breakfast.objects.all()
-    for breakfast in breakfasts:
-        total_protein += breakfast.protein
-        total_carb += breakfast.carb
-        total_fat += breakfast.fat
-    
-    # Sum up values from Lunch
-    lunches = Lunch.objects.all()
-    for lunch in lunches:
-        total_protein += lunch.protein
-        total_carb += lunch.carb
-        total_fat += lunch.fat
-    
-    # Sum up values from Dinner
-    dinners = Dinner.objects.all()
-    for dinner in dinners:
-        total_protein += dinner.protein
-        total_carb += dinner.carb
-        total_fat += dinner.fat
-    
-    data = {
-        'total_protein': total_protein,
-        'total_carb': total_carb,
-        'total_fat': total_fat,
-    }
-    
-    return JsonResponse(data)
+    if request.method == 'GET':
+        meals = Meal.objects.all()  # Get all meals from the database
+        
+        # Get a list of all meal names
+        meal_names = [meal.name for meal in meals]
+        
+        total_protein = 0
+        total_carb = 0
+        total_fat = 0
+        
+        # Calculate the sum of protein, carb, and fat values from all meals
+        for meal in meals:
+            total_protein += meal.protein
+            total_carb += meal.carb
+            total_fat += meal.fat
+        
+        response_data = {
+            "meal_names": meal_names,
+            "total_protein": total_protein,
+            "total_carb": total_carb,
+            "total_fat": total_fat
+        }
+        
+        return JsonResponse(response_data)
+
+#---- Break-Fast-----#
+
+from .models import Meal
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def add_breakfast(request):
+    if request.method == 'POST':
+        meal_type = "breakfast"
+        request_data = json.loads(request.body)
+        name = request_data.get('name')
+        calories_str = request_data.get('calories')
+        protein_str = request_data.get('protein')
+        carb_str = request_data.get('carb')
+        fat_str = request_data.get('fat')
+        print(calories_str, "ccccc")
+        if None not in (calories_str, protein_str, carb_str, fat_str):
+            try:
+                calories = float(calories_str)
+                protein = float(protein_str)
+                carb = float(carb_str)
+                fat = float(fat_str)
+                
+                meal = Meal.objects.create(
+                    meal_type=meal_type,
+                    name=name,
+                    calories=calories,
+                    protein=protein,
+                    carb=carb,
+                    fat=fat
+                )
+                return JsonResponse({'message': 'Breakfast added successfully'})
+                
+            except ValueError:
+                return JsonResponse({'message': 'Invalid number format for some fields'}, status=400)
+        else:
+            return JsonResponse({'message': 'Missing required fields'}, status=400)
