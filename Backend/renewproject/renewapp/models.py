@@ -101,11 +101,3 @@ class Meal(models.Model):
     protein = models.FloatField()
     carb = models.FloatField()
     fat = models.FloatField()
-class Breakfast(Meal):
-    pass
-
-class Lunch(Meal):
-    pass
-
-class Dinner(Meal):
-    pass

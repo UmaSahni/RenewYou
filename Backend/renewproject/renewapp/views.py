@@ -132,7 +132,7 @@ def create_workout_plan(request):
 #------ Dashboard ------#
 
 
-from .models import Breakfast, Lunch, Dinner
+
 from .models import Meal
 @csrf_exempt
 def dashboard(request):
@@ -271,4 +271,21 @@ def add_dinner(request):
             return JsonResponse({'message': 'Missing required fields'}, status=400)
 
 
-#------------- END -------------#
+#------------- Fitness Data -------------#
+@csrf_exempt
+def get_fitness_data(request):
+    fitness_data = {
+        "weightloss": [
+            {"title": "Weight Loss Tip 1", "description": "Eat a balanced diet."},
+            {"title": "Weight Loss Tip 2", "description": "Stay hydrated."},
+        ],
+        "heightgain": [
+             {"title": "Height Gain Tip 1", "description": "Practice good posture."},
+            {"title": "Height Gain Tip 2", "description": "Get enough sleep."},
+        ],
+        "weightgain": [
+            {"title": "Weight Gain Tip 1", "description": "Consume more calories."},
+            {"title": "Weight Gain Tip 2", "description": "Focus on strength training."},
+        ],
+    }
+    return JsonResponse(fitness_data)
