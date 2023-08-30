@@ -125,3 +125,46 @@ def create_workout_plan(request):
             return JsonResponse({"error": str(e)}, status=400)
     else:
         return JsonResponse({"message": "Invalid request method."})
+    
+
+
+
+#------ Dashboard ------#
+
+
+from .models import Breakfast, Lunch, Dinner
+
+def dashboard(request):
+    # Calculate and sum the protein, carb, and fat values from all meals
+    total_protein = 0
+    total_carb = 0
+    total_fat = 0
+    
+    # Sum up values from Breakfast
+    breakfasts = Breakfast.objects.all()
+    for breakfast in breakfasts:
+        total_protein += breakfast.protein
+        total_carb += breakfast.carb
+        total_fat += breakfast.fat
+    
+    # Sum up values from Lunch
+    lunches = Lunch.objects.all()
+    for lunch in lunches:
+        total_protein += lunch.protein
+        total_carb += lunch.carb
+        total_fat += lunch.fat
+    
+    # Sum up values from Dinner
+    dinners = Dinner.objects.all()
+    for dinner in dinners:
+        total_protein += dinner.protein
+        total_carb += dinner.carb
+        total_fat += dinner.fat
+    
+    data = {
+        'total_protein': total_protein,
+        'total_carb': total_carb,
+        'total_fat': total_fat,
+    }
+    
+    return JsonResponse(data)
