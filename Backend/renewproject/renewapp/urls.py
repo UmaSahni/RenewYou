@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import user_registration,user_login, create_goal, create_trainer_profile, create_workout_plan, dashboard, add_breakfast
+from .views import user_registration,user_login, create_goal, create_trainer_profile, create_workout_plan, dashboard, add_breakfast,add_lunch, add_dinner
 
 urlpatterns = [
     path('register/', user_registration, name='user_registration'),
@@ -8,6 +8,8 @@ urlpatterns = [
     path('create-trainer-profile/', create_trainer_profile, name='create-trainer-profile'),
     path('create-workout-plan/', create_workout_plan, name='create-workout-plan'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('add-breakfast/',add_breakfast , name='add-breakfast'),
+    path('breakfast/',add_breakfast , name='breakfast'),
+    path('lunch/',add_lunch , name='lunch'),
+    path('dinner/',add_dinner , name='dinner'),
     # Other URL patterns can be added here
 ]
