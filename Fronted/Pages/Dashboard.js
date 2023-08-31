@@ -40,6 +40,7 @@ const Dashboard = () => {
 const styles = StyleSheet.create({
   buttonContainer: {
     // flexDirection: "row",
+   
     justifyContent: "space-between",
     width: "80%",
     marginTop: 20,
