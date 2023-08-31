@@ -15,8 +15,9 @@ const BreakFastModal = ({ meal_type, onDataUpdate }) => {
 
   return (
     <View style={styles.container}>
+      
       <View style={styles.buttonContainer} >
-      <Text>{meal_type}</Text>
+      <Text>{meal_type.charAt(0).toUpperCase() + meal_type.slice(1)}</Text> 
       <TouchableOpacity onPress={openModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>
       </TouchableOpacity>
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
     width: "80%",
     marginTop: 20,
   },
+   
 });
 
 

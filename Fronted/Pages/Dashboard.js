@@ -4,6 +4,8 @@ import MainBoard from "../Components/MainBoard";
 import BreakFastModal from "../Components/BreakFastModal";
 import ChartComponent from "../Components/ChartComponent";
 import { useFoodDataContext } from "../Context/FoodDataContext";
+import MealList from "../Components/MealList";
+import { ScrollView } from 'react-native';
 
 const Dashboard = () => {
   const [foodData, setFoodData] = useState(null);
@@ -16,7 +18,8 @@ const Dashboard = () => {
   };
 
   return (
-    <View>
+    <ScrollView>
+    
       <MainBoard onData={foodData} />
       <View
         style={{
@@ -28,12 +31,26 @@ const Dashboard = () => {
         }}
       />
       <View style={styles.buttonContainer}>
+        <Text style={styles.Title} >Add food</Text>
         <BreakFastModal meal_type="breakfast" onDataUpdate={handleDataUpdate} />
         <BreakFastModal meal_type="lunch" onDataUpdate={handleDataUpdate} />
         <BreakFastModal meal_type="dinner" onDataUpdate={handleDataUpdate} />
       </View>
-      <ChartComponent  />
-    </View>
+      <View
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: "#ccc",
+          marginVertical: 5,
+          width: "95%",
+          alignSelf: "center",
+        }}
+      />
+      <ChartComponent/>
+     
+      <MealList/>
+
+    
+    </ScrollView>
   );
 };
 
@@ -44,6 +61,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "80%",
     marginTop: 20,
+  },
+  Title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign:"center",
   },
 });
 
