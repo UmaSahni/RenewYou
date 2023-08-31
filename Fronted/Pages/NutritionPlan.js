@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
-const NutritionPlan = () => {
+const NutritionPlan = ({navigation}) => {
   const [data, setData] = useState([]);
   const route = useRoute();
   const fitnessData = route.params?.fitnessData || [];
@@ -12,6 +12,11 @@ const NutritionPlan = () => {
   useEffect(() => {
     setData(fitnessData);
   }, [fitnessData]);
+
+  // Click on START NUTRITION
+  const startNutionPLan = () =>{
+    navigation.navigate("Dashboard")
+  }
 
   return (
     <View style={styles.container}>
@@ -26,7 +31,7 @@ const NutritionPlan = () => {
           </View>
         ))
       }
-      <Button title="Start Nutrition Plan" onPress={() => {}} />
+      <Button title="Start Nutrition Plan" onPress={startNutionPLan} />
     </View>
   );
 }

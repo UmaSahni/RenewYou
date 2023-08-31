@@ -22,6 +22,11 @@ const Home = ({ navigation }) => {
           title='Fitness'
           style={styles.button}
         />
+        <Button
+          onPress={() => navigation.navigate("Dashboard")}
+          title='Dashboard'
+          style={styles.button}
+        />
       </View>
     </View>
   );

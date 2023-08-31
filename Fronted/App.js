@@ -7,6 +7,7 @@ import Login from './Pages/Login';
 import Home from './Pages/Home';
 import Fitness from './Pages/Fitness';
 import NutritionPlan from './Pages/NutritionPlan';
+import Dashboard from './Pages/Dashboard';
 
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Fitness" component={Fitness} />
         <Stack.Screen name="NutritionPlan" component={NutritionPlan} />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
         {/* Other screens can be added here */}
       </Stack.Navigator>
     </NavigationContainer>
