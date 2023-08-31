@@ -17,6 +17,11 @@ const Home = ({ navigation }) => {
           title='Login'
           style={styles.button}
         />
+        <Button
+          onPress={() => navigation.navigate("Fitness")}
+          title='Fitness'
+          style={styles.button}
+        />
       </View>
     </View>
   );
