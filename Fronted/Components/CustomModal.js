@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Modal, Button, TextInput, StyleSheet } from "react-native";
+import { useFoodDataContext } from "../Context/FoodDataContext";
 
 
 const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) => {
@@ -8,7 +9,7 @@ const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) =
   const [protein, setProtein] = useState("");
   const [fat, setFat] = useState("");
   const [carb, setCarb] = useState("");
-
+  
   let URL = `http://10.0.2.2:8000/${endpoint}/`;
 
   const handleSubmission = () => {
@@ -44,7 +45,7 @@ const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) =
 
         // Call the onDataUpdate function passed from the parent
          onDataUpdate(newData)
-        console.log(newData);
+        // console.log(newData);
             
         // Close the modal
         onClose();

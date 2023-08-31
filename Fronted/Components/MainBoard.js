@@ -1,23 +1,28 @@
 
 import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from 'react'
+import { useFoodDataContext } from "../Context/FoodDataContext";
 
 const MainBoard = ({onData}) => {
   let URL = 'http://10.0.2.2:8000/dashboard/'
   const [fooddata, setFoodData] = useState({});
+const { setUpdatedFoodData } = useFoodDataContext();
 
+
+// GET Data from Dashboard
   const fetchUpdatedData = () => {
     fetch(URL)
       .then((res) => res.json())
       .then((data) => {
         setFoodData(data);
-        console.log(data); // Updated food data
+        setUpdatedFoodData(data)
+        // console.log(data); // Updated food data
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    fetchUpdatedData(); // Fetch data when the component mounts
+    fetchUpdatedData(); 
   }, [onData]);
   
     return (

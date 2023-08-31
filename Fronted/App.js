@@ -8,12 +8,14 @@ import Home from './Pages/Home';
 import Fitness from './Pages/Fitness';
 import NutritionPlan from './Pages/NutritionPlan';
 import Dashboard from './Pages/Dashboard';
+import { FoodDataProvider } from './Context/FoodDataContext';
 
 
 export default function App() {
   const Stack = createStackNavigator();
   
   return (
+    <FoodDataProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home' >
         <Stack.Screen name="Signup" component={SignupScreen} />
@@ -25,6 +27,7 @@ export default function App() {
         {/* Other screens can be added here */}
       </Stack.Navigator>
     </NavigationContainer>
+    </FoodDataProvider>
   );
 }
 
