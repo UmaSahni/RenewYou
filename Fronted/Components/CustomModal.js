@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, Modal, Button, TextInput, StyleSheet } from "react-native";
-import { fetchUpdatedData } from "./MainBoard";
 
-const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate  }) => {
+
+const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) => {
   const [name, setName] = useState("");
   const [calories, setCalories] = useState("");
   const [protein, setProtein] = useState("");
   const [fat, setFat] = useState("");
   const [carb, setCarb] = useState("");
 
-  let URL = "http://10.0.2.2:8000/dinner/";
+  let URL = `http://10.0.2.2:8000/${endpoint}/`;
 
   const handleSubmission = () => {
     // Prepare data object
@@ -60,7 +60,7 @@ const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate  }) => {
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.modalContainer}>
-        <Text>Add Food Item</Text>
+        <Text>Add Food Item for {endpoint} </Text>
 
         <TextInput
           style={styles.input}

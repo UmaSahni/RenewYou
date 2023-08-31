@@ -14,7 +14,9 @@ const Dashboard = () => {
       <MainBoard onData = {foodData}  />
       <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginVertical: 5, width: '95%', alignSelf: 'center' }} />
 
-       <BreakFastModal onDataUpdate={handleDataUpdate}  />
+       <BreakFastModal meal_type="breakfast" onDataUpdate={handleDataUpdate}  />
+       <BreakFastModal meal_type="lunch" onDataUpdate={handleDataUpdate}  />
+       <BreakFastModal meal_type="dinner" onDataUpdate={handleDataUpdate}  />
         
     </View>
   );
