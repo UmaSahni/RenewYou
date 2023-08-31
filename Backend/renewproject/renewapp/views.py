@@ -6,7 +6,9 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 User = get_user_model()
 
@@ -39,11 +41,14 @@ def user_login(request):
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
-            return JsonResponse({"message": "User logged in successfully."})
+            
+            # Generate and return access token
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            
+            return JsonResponse({"message": "User logged in successfully.", "access_token": access_token})
         else:
             return JsonResponse({"message": "Invalid credentials."}, status=401)
-        
-
 
         # renewapp/views.py
 
@@ -134,33 +139,29 @@ def create_workout_plan(request):
 
 
 from .models import Meal
+@login_required
 @csrf_exempt
 def dashboard(request):
     if request.method == 'GET':
-        meals = Meal.objects.all()  # Get all meals from the database
-        
-        # Get a list of all meal names
-        meal_names = [meal.name for meal in meals]
-        
+        meals = Meal.objects.filter(user=request.user)  # Filter meals by the authenticated user
+
         total_protein = 0
         total_carb = 0
         total_fat = 0
         
-        # Calculate the sum of protein, carb, and fat values from all meals
         for meal in meals:
             total_protein += meal.protein
             total_carb += meal.carb
             total_fat += meal.fat
         
         response_data = {
-            "meal_names": meal_names,
+            "meal_names": [meal.name for meal in meals],
             "total_protein": total_protein,
             "total_carb": total_carb,
             "total_fat": total_fat
         }
         
         return JsonResponse(response_data)
-
 #---- Break-Fast-----#
 
 from .models import Meal
@@ -177,8 +178,8 @@ def add_breakfast(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-        print(calories_str, "ccccc")
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user = request_data.get('user')
+        if None not in (calories_str, protein_str, carb_str, fat_str, user):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
@@ -191,7 +192,8 @@ def add_breakfast(request):
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user=user
                 )
                 return JsonResponse({'message': 'Breakfast added successfully'})
                 
@@ -201,6 +203,8 @@ def add_breakfast(request):
             return JsonResponse({'message': 'Missing required fields'}, status=400)
         
 #------ Lunch --------#
+from .models import CustomUser, Meal
+
 @csrf_exempt
 def add_lunch(request):
     if request.method == 'POST':
@@ -211,13 +215,16 @@ def add_lunch(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-       
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user_id = request_data.get('user')  # Get the user ID from the payload
+        
+        if None not in (calories_str, protein_str, carb_str, fat_str, user_id):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
                 carb = float(carb_str)
                 fat = float(fat_str)
+                
+                user = CustomUser.objects.get(pk=user_id)  # Retrieve the user instance
                 
                 meal = Meal.objects.create(
                     meal_type=meal_type,
@@ -225,7 +232,8 @@ def add_lunch(request):
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user=user  # Set the user instance
                 )
                 return JsonResponse({'message': 'Lunch added successfully'})
                 
@@ -233,8 +241,6 @@ def add_lunch(request):
                 return JsonResponse({'message': 'Invalid number format for some fields'}, status=400)
         else:
             return JsonResponse({'message': 'Missing required fields'}, status=400)
-
-
 
 #------ Dinner --------#
 @csrf_exempt
@@ -247,8 +253,8 @@ def add_dinner(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-      
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user = request_data.get('user')
+        if None not in (calories_str, protein_str, carb_str, fat_str,user):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
@@ -261,7 +267,8 @@ def add_dinner(request):
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user=user
                 )
                 return JsonResponse({'message': 'Dinner added successfully'})
                 
@@ -289,3 +296,6 @@ def get_fitness_data(request):
         ],
     }
     return JsonResponse(fitness_data)
+
+#---------------
+

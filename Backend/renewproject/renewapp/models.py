@@ -88,13 +88,14 @@ class WorkoutPlan(models.Model):
         return self.plan_name
     
 
+
 class Meal(models.Model):
     MEAL_TYPES = [
         ('breakfast', 'Breakfast'),
         ('lunch', 'Lunch'),
         ('dinner', 'Dinner'),
     ]
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,)
     meal_type = models.CharField(max_length=20,default='breakfast', choices=MEAL_TYPES)
     name = models.CharField(max_length=100, default="unknown food")
     calories = models.FloatField()

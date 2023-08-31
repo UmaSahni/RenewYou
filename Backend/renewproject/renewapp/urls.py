@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import user_registration,user_login, create_goal, create_trainer_profile, create_workout_plan, dashboard, add_breakfast,add_lunch, add_dinner, get_fitness_data
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('register/', user_registration, name='user_registration'),
@@ -13,4 +14,6 @@ urlpatterns = [
     path('dinner/',add_dinner , name='dinner'),
     path('fitness-data/',get_fitness_data , name='fitness-data'),
     # Other URL patterns can be added here
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
