@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Button, StyleSheet, Text } from "react-native";
+import { View, Button, StyleSheet, Text, TouchableOpacity } from "react-native";
 import CustomModal from "./CustomModal";
 
-const BreakFastModal = ({meal_type, onDataUpdate }) => {
+const BreakFastModal = ({ meal_type, onDataUpdate }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -14,34 +14,50 @@ const BreakFastModal = ({meal_type, onDataUpdate }) => {
   };
 
   return (
-    <View>
-      <View style={styles.container}>
-        <Button title={meal_type} onPress={openModal} />
-        <CustomModal
-          onDataUpdate={onDataUpdate}
-          visible={modalVisible}
-          onClose={closeModal}
-          endpoint={meal_type}
-        />
+    <View style={styles.container}>
+      <View style={styles.buttonContainer} >
+      <Text>{meal_type}</Text>
+      <TouchableOpacity onPress={openModal} style={styles.plusButton}>
+        <Text style={styles.plusButtonText}>+</Text>
+      </TouchableOpacity>
       </View>
+      <CustomModal
+        onDataUpdate={onDataUpdate}
+        visible={modalVisible}
+        onClose={closeModal}
+        endpoint={meal_type}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+  container: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  modalContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
+  plusButton: {
+    backgroundColor: '#f0f0f0',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  plusButtonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "80%",
-    alignItems: "center",
+    marginTop: 20,
   },
 });
+
+
 
 export default BreakFastModal;
