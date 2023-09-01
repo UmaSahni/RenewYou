@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useFoodDataContext } from "../Context/FoodDataContext";
 
 const MainBoard = ({onData}) => {
-  let URL = 'http://10.0.2.2:8000/dashboard/'
+  let URL = 'http://10.0.2.2:8000/dashboard/20'
   const [fooddata, setFoodData] = useState({});
 const { setUpdatedFoodData } = useFoodDataContext();
 

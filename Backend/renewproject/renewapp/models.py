@@ -94,14 +94,15 @@ class Meal(models.Model):
         ('lunch', 'Lunch'),
         ('dinner', 'Dinner'),
     ]
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     meal_type = models.CharField(max_length=20,default='breakfast', choices=MEAL_TYPES)
     name = models.CharField(max_length=100, default="unknown food")
     calories = models.FloatField()
     protein = models.FloatField()
     carb = models.FloatField()
     fat = models.FloatField()
-
+    fitness_goal = models.ForeignKey(FitnessGoal, on_delete=models.CASCADE,default=1)
+    # Add a foreign key to FitnessGoal to associate meals with fitness goals
 
 from django.utils import timezone
 class WaterIntake(models.Model):

@@ -131,36 +131,43 @@ def create_workout_plan(request):
 
 
 #------ Dashboard ------#
-
-
-
 from .models import Meal
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+
 @csrf_exempt
-def dashboard(request):
+def dashboard(request, user_id):
     if request.method == 'GET':
-        meals = Meal.objects.all()  # Get all meals from the database
-        
-        # Get a list of all meal names
-        meal_names = [meal.name for meal in meals]
-        
-        total_protein = 0
-        total_carb = 0
-        total_fat = 0
-        
-        # Calculate the sum of protein, carb, and fat values from all meals
-        for meal in meals:
-            total_protein += meal.protein
-            total_carb += meal.carb
-            total_fat += meal.fat
-        
-        response_data = {
-            "meal_names": meal_names,
-            "total_protein": total_protein,
-            "total_carb": total_carb,
-            "total_fat": total_fat
-        }
-        
-        return JsonResponse(response_data)
+        try:
+            # Convert user_id to an integer
+            user_id = int(user_id)
+
+            # Get all meals from the database
+            all_meals = Meal.objects.all()
+
+            # Filter meals for the specific user
+            user_meals = [meal for meal in all_meals if meal.user_id == user_id]
+
+            # Get a list of meal names for the user
+            meal_names = [meal.name for meal in user_meals]
+
+            total_protein = sum(meal.protein for meal in user_meals)
+            total_carb = sum(meal.carb for meal in user_meals)
+            total_fat = sum(meal.fat for meal in user_meals)
+
+            response_data = {
+                "meal_names": meal_names,
+                "total_protein": total_protein,
+                "total_carb": total_carb,
+                "total_fat": total_fat
+            }
+
+            return JsonResponse(response_data)
+
+        except ValueError:
+            return HttpResponseBadRequest("Invalid user ID")
+
+    return HttpResponseBadRequest("Invalid request")
 
 #---- Break-Fast-----#
 
@@ -291,26 +298,57 @@ def get_fitness_data(request):
     }
     return JsonResponse(fitness_data)
 
-# This Logic is Wrong 
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import WaterIntake
+
 @csrf_exempt
 def update_water_intake(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        user = request.user
-        amount_ml = data.get('amount_ml', 0)
-
-        water_intake = WaterIntake.objects.create(user=user, amount_ml=amount_ml)
-
-        return JsonResponse({"message": f"Water intake updated successfully. You drank {amount_ml} ml of water."}, status=201)
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user', None)  # Get the user_id from the request data
+            amount_ml = data.get('amount_ml', 0)
+            
+            if user_id is not None:
+                # Create a new water intake record for the user (assuming user_id is valid)
+                water_intake = WaterIntake.objects.create(user_id=user_id, amount_ml=amount_ml)
+                return JsonResponse({
+                    "message": f"Water intake updated successfully. You drank {amount_ml} ml of water.",
+                    "water_intake_id": water_intake.id
+                }, status=201)
+            else:
+                return JsonResponse({"message": "Invalid user ID."}, status=400)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({"message": "Invalid JSON data."}, status=400)
     else:
-        return JsonResponse({"message": "Invalid request method."})
+        return JsonResponse({"message": "Invalid request method."}, status=405)
 
-from .models import WaterIntake
-
+from math import floor
 
 @csrf_exempt
 def getwater(request):
-    user = request.user
-    total_water = WaterIntake.objects.filter(user=user).aggregate(total=models.Sum('amount_ml'))['total'] or 0
+    if request.method == 'GET':
+        try:
+            user_id = request.GET.get('user', None)  # Get the user_id from the query parameter
 
-    return JsonResponse({"total_water_ml": total_water})
+            if user_id is not None:
+                # Calculate the total water intake for the user (assuming user_id is valid)
+                total_water = WaterIntake.objects.filter(user_id=user_id).aggregate(total=models.Sum('amount_ml'))['total'] or 0
+                glasses = floor(total_water / 100)  # Assuming 1 glass = 100 ml
+
+                response_data = {
+                    "total_water_ml": total_water,
+                    "glasses": glasses
+                }
+
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({"total_water_ml": 0, "glasses": 0, "message": "Invalid user ID."}, status=400)
+
+        except WaterIntake.DoesNotExist:
+            return JsonResponse({"total_water_ml": 0, "glasses": 0})
+
+    return JsonResponse({"message": "Invalid request method."}, status=405)
