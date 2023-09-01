@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from datetime import timedelta 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,12 +31,10 @@ CORS_ALLOWED_ORIGINS = [
 
 
 ALLOWED_HOSTS = ['*']
-AUTH_USER_MODEL = 'renewapp.CustomUser'
 
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework_simplejwt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -148,14 +146,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Manually Added
 
 AUTH_USER_MODEL = 'renewapp.CustomUser'
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Adjust the token lifetime as needed
-}

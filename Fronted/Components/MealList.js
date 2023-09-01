@@ -6,12 +6,16 @@ const MealList = () => {
   const [mealNames, setMealNames] = useState([]);
   const { updatedfooddata } = useFoodDataContext();
 
-  const mealNamesFromContext = updatedfooddata?.meal_names || [];
+ 
+    const mealNamesFromContext = updatedfooddata?.meal_names || [];
+  
+  
   
 useEffect(() => {
   setMealNames(mealNamesFromContext);
-}, [mealNamesFromContext]);
-  const renderMealItem = ({ item }) => (
+}, [updatedfooddata]);
+  
+const renderMealItem = ({ item }) => (
     <TouchableOpacity style={styles.mealItem}>
       <Text style={styles.mealName}>{item}</Text>
     </TouchableOpacity>

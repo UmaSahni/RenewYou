@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import WaterIntake from '../Components/WaterIntake';
 
 const Home = ({ navigation }) => {
   return (
@@ -7,6 +8,7 @@ const Home = ({ navigation }) => {
       <Text style={styles.title}>Welcome to MyApp</Text>
       <Text style={styles.subtitle}>Explore and Connect</Text>
       <View style={styles.buttonContainer}>
+        <WaterIntake/>
         <Button
           onPress={() => navigation.navigate("Signup")}
           title='Sign Up'
