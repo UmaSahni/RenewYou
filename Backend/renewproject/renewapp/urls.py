@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import user_registration,user_login, create_goal, create_trainer_profile, create_workout_plan, dashboard, add_breakfast,add_lunch, add_dinner, get_fitness_data
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from .views import update_water_intake,getwater
 urlpatterns = [
     path('register/', user_registration, name='user_registration'),
     path('login/', user_login, name='user_login'),
@@ -13,7 +13,10 @@ urlpatterns = [
     path('lunch/',add_lunch , name='lunch'),
     path('dinner/',add_dinner , name='dinner'),
     path('fitness-data/',get_fitness_data , name='fitness-data'),
+    path('update-water-intake/', update_water_intake, name='update-water-intake'),
+    path('getwater/', getwater, name='getwater'),
     # Other URL patterns can be added here
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
 ]

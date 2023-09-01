@@ -9,6 +9,9 @@ from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from .models import WaterIntake
+from django.db import models 
+
 
 User = get_user_model()
 
@@ -320,3 +323,29 @@ def get_fitness_data(request):
 
 #---------------
 
+
+
+
+@login_required
+@csrf_exempt
+def update_water_intake(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user = request.user
+        amount_ml = data.get('amount_ml', 0)
+
+        water_intake = WaterIntake.objects.create(user=user, amount_ml=amount_ml)
+
+        return JsonResponse({"message": f"Water intake updated successfully. You drank {amount_ml} ml of water."}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid request method."})
+
+from .models import WaterIntake
+
+
+@login_required
+def getwater(request):
+    user = request.user
+    total_water = WaterIntake.objects.filter(user=user).aggregate(total=models.Sum('amount_ml'))['total'] or 0
+
+    return JsonResponse({"total_water_ml": total_water})
