@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { UserProfile } from '../Context/UserProfileContext';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { setuserId, userId } = useContext(UserProfile);
 
   const handleLogin = async () => {
     const user = {
@@ -20,12 +22,17 @@ const LoginScreen = ({ navigation }) => {
         body: JSON.stringify(user),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        
+        // Assuming the API returns the user ID upon successful login
+        setuserId(data.user_id); // Set the user ID in context
         Alert.alert("Login Success", "You have successfully logged in.");
-        navigation.navigate("Fitness")
+        // Navigate to the desired screen
+        // navigation.navigate("Fitness");
       } else {
+        const data = await response.json();
         Alert.alert("Login Failed", data.message);
       }
     } catch (error) {
@@ -33,6 +40,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert("Login Failed", "An error occurred during login.");
     }
   };
+
 
   return (
     <View style={styles.container}>

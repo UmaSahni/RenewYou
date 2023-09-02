@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import user_registration,user_login, create_goal, create_trainer_profile, create_workout_plan, dashboard, add_breakfast,add_lunch, add_dinner, get_fitness_data
-from .views import update_water_intake,getwater
+from .views import update_water_intake,getwater, get_user_data
 urlpatterns = [
     path('register/', user_registration, name='user_registration'),
     path('login/', user_login, name='user_login'),
@@ -15,4 +15,5 @@ urlpatterns = [
     # Other URL patterns can be added here
     path('update-water-intake/', update_water_intake, name='update-water-intake'),
     path('getwater/', getwater, name='getwater'),
+    path('get-user-data/<int:user_id>/', get_user_data, name='get_user_data'),
 ]

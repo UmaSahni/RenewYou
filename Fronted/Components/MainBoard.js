@@ -1,12 +1,17 @@
 
 import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useFoodDataContext } from "../Context/FoodDataContext";
+import { UserProfile } from "../Context/UserProfileContext";
+
 
 const MainBoard = ({onData}) => {
-  let URL = 'http://10.0.2.2:8000/dashboard/20'
+  const {userId} = useContext(UserProfile)
+  let URL = `http://10.0.2.2:8000/dashboard/${userId}`
+
+
   const [fooddata, setFoodData] = useState({});
-const { setUpdatedFoodData } = useFoodDataContext();
+  const { setUpdatedFoodData } = useFoodDataContext();
 
 
 // GET Data from Dashboard

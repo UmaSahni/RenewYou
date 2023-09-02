@@ -8,7 +8,7 @@ const Home = ({ navigation }) => {
       <Text style={styles.title}>Welcome to MyApp</Text>
       <Text style={styles.subtitle}>Explore and Connect</Text>
       <View style={styles.buttonContainer}>
-        <WaterIntake/>
+        {/* <WaterIntake/> */}
         <Button
           onPress={() => navigation.navigate("Signup")}
           title='Sign Up'
@@ -27,6 +27,16 @@ const Home = ({ navigation }) => {
         <Button
           onPress={() => navigation.navigate("Dashboard")}
           title='Dashboard'
+          style={styles.button}
+        />
+        <Button
+          onPress={() => navigation.navigate("Profile")}
+          title='Profile'
+          style={styles.button}
+        />
+        <Button
+          onPress={() => navigation.navigate("AddFood")}
+          title='AddFood'
           style={styles.button}
         />
       </View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,13 +7,16 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { UserProfile } from "../Context/UserProfileContext";
 
 function WaterIntake() {
   const [waterGlasses, setWaterGlasses] = useState(0);
   const [totalML, setTotalML] = useState(0);
   const [glass, setGlass] = useState(0);
+  
+  const {userId} = useContext(UserProfile)
   let URL = "http://10.0.2.2:8000/update-water-intake/";
-  let GETURL = `http://10.0.2.2:8000/getwater/?user=22`;
+  let GETURL = `http://10.0.2.2:8000/getwater/?user=${userId}`;
 
   const getWater = () => {
     fetch(GETURL)
@@ -33,7 +36,7 @@ function WaterIntake() {
 
   const handleAddWater = () => {
     let obj = {
-      user: 22,
+      user: userId,
       amount_ml: 100,
     };
 
@@ -45,7 +48,7 @@ function WaterIntake() {
       body: JSON.stringify(obj),
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         // Update the state to add another water glass
         getWater()
         setWaterGlasses(waterGlasses + 1);

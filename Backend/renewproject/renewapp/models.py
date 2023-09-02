@@ -109,3 +109,7 @@ class WaterIntake(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     intake_date = models.DateField(default=timezone.now)
     amount_ml = models.PositiveIntegerField(default=0)
+
+
+
+

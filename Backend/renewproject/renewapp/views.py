@@ -30,6 +30,8 @@ def user_registration(request):
             return JsonResponse({"error": str(e)}, status=400)
 
 
+from .models import CustomUser  # Import your CustomUser model
+
 @csrf_exempt
 def user_login(request):
     if request.method == 'POST':
@@ -37,14 +39,17 @@ def user_login(request):
         email = data.get('email')
         password = data.get('password')
         
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)
-            return JsonResponse({"message": "User logged in successfully."})
-        else:
-            return JsonResponse({"message": "Invalid credentials."}, status=401)
+        try:
+            user = CustomUser.objects.get(email=email)  # Assuming email is unique
+            if user.check_password(password):
+                # Password is correct, log in the user
+                # You can add any additional authentication logic here
+                return JsonResponse({"message": "User logged in successfully.", "user_id": user.id})
+        except CustomUser.DoesNotExist:
+            pass
         
-
+        # Authentication failed
+        return JsonResponse({"message": "Invalid credentials."}, status=401)
 
         # renewapp/views.py
 
@@ -352,3 +357,29 @@ def getwater(request):
             return JsonResponse({"total_water_ml": 0, "glasses": 0})
 
     return JsonResponse({"message": "Invalid request method."}, status=405)
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import CustomUser
+
+@csrf_exempt
+def get_user_data(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+        # Serialize user data to JSON format
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "weight": user.weight,
+            "height": user.height,
+            "age": user.age,
+            "sex": user.sex,
+            "is_active": user.is_active,
+            "is_staff": user.is_staff,
+        }
+        return JsonResponse(user_data)
+    except CustomUser.DoesNotExist:
+        return JsonResponse({"message": "User not found"}, status=404)
