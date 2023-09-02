@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import WaterIntake from '../Components/WaterIntake';
 
 const Home = ({ navigation }) => {
@@ -8,6 +8,12 @@ const Home = ({ navigation }) => {
       <Text style={styles.title}>Welcome to MyApp</Text>
       <Text style={styles.subtitle}>Explore and Connect</Text>
       <View style={styles.buttonContainer}>
+        <View style={styles.badge} >
+        <Image
+        source={require("../assets/water-badge.png")}
+        style={{ width: 120, height: 120,  }} // Adjust the width and height as needed
+      />
+       </View>
         <WaterIntake/>
         <Button
           onPress={() => navigation.navigate("Signup")}
@@ -72,6 +78,11 @@ const styles = StyleSheet.create({
     width: 50,
    
   },
+  badge :{
+    display:'flex',
+    justifyContent:"center",
+    alignItems:"center",
+  }
 });
 
 export default Home;

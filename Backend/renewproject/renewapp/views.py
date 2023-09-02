@@ -310,21 +310,46 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import WaterIntake
+from django.db.models import Sum
+
+from django.http import JsonResponse
+from .models import CustomUser, WaterIntake
+
+from django.http import JsonResponse
+from .models import CustomUser, WaterIntake
+import json
 
 @csrf_exempt
 def update_water_intake(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            user_id = data.get('user', None)  # Get the user_id from the request data
+            user_id = data.get('user', None)
             amount_ml = data.get('amount_ml', 0)
             
             if user_id is not None:
-                # Create a new water intake record for the user (assuming user_id is valid)
+                # Create a new water intake record for the user
                 water_intake = WaterIntake.objects.create(user_id=user_id, amount_ml=amount_ml)
+                
+                # Check if the user has earned any of the three badges
+                user = CustomUser.objects.get(id=user_id)
+                earned_badge_names = check_badges(user, amount_ml)
+                
+                # Get the user's existing badge names as a list
+                existing_badge_names = user.badge_names.split(',') if user.badge_names else []
+                
+                # Combine the existing and earned badge names and remove duplicates
+                all_badge_names = list(set(existing_badge_names + earned_badge_names))
+                
+                # Update the user's badge_names field with the combined badge names as a comma-separated string
+                user.badge_names = ','.join(all_badge_names)
+                user.save()
+                
                 return JsonResponse({
                     "message": f"Water intake updated successfully. You drank {amount_ml} ml of water.",
-                    "water_intake_id": water_intake.id
+                    "water_intake_id": water_intake.id,
+                    "earned_badge_names": earned_badge_names,
+                    "all_badge_names": all_badge_names
                 }, status=201)
             else:
                 return JsonResponse({"message": "Invalid user ID."}, status=400)
@@ -334,8 +359,21 @@ def update_water_intake(request):
     else:
         return JsonResponse({"message": "Invalid request method."}, status=405)
 
-from math import floor
+# Define a function to check if the user has earned any of the three badges
+def check_badges(user, amount_ml):
+    earned_badge_names = []
+    
+    # Check if the user has completed the "Water Drink" badge (e.g., 2 liters of water)
+    if amount_ml >= 2000 and "Water Drink" not in user.badge_names.split(','):
+        earned_badge_names.append("Water Drink")
+    
+    # You can add more badge checks here based on your criteria
+    # For example, check if the user has completed the "Nutrition Complete" or "Goal Achieve" badges.
+    
+    return earned_badge_names
 
+
+from math import floor
 @csrf_exempt
 def getwater(request):
     if request.method == 'GET':

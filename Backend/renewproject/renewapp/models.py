@@ -24,9 +24,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     sex = models.CharField(max_length=1, choices=GENDER_CHOICES)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    water_intake = models.PositiveIntegerField(default=0)
+    badge_names = models.CharField(max_length=255, default='', blank=True)
 
-    objects = CustomUserManager()
-
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'weight', 'height', 'age', 'sex']
 

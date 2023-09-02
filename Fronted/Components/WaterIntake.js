@@ -12,7 +12,7 @@ import { UserProfile } from "../Context/UserProfileContext";
 function WaterIntake() {
   const [waterGlasses, setWaterGlasses] = useState(0);
   const [totalML, setTotalML] = useState(0);
-  const [glass, setGlass] = useState(0);
+  const [glass, setGlass] = useState(1);
   
   const {userId} = useContext(UserProfile)
   let URL = "http://10.0.2.2:8000/update-water-intake/";
