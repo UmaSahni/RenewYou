@@ -8,7 +8,7 @@ const Home = ({ navigation }) => {
       <Text style={styles.title}>Welcome to MyApp</Text>
       <Text style={styles.subtitle}>Explore and Connect</Text>
       <View style={styles.buttonContainer}>
-        {/* <WaterIntake/> */}
+        <WaterIntake/>
         <Button
           onPress={() => navigation.navigate("Signup")}
           title='Sign Up'

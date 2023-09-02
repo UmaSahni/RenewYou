@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Modal, Button, TextInput, StyleSheet } from "react-native";
 import { useFoodDataContext } from "../Context/FoodDataContext";
+import { UserProfile } from "../Context/UserProfileContext";
 
 
 const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) => {
@@ -11,7 +12,8 @@ const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) =
   const [carb, setCarb] = useState("");
   
   let URL = `http://10.0.2.2:8000/${endpoint}/`;
-
+  const {userId} = useContext(UserProfile)
+  
   const handleSubmission = () => {
     // Prepare data object
     const newData = {
@@ -20,6 +22,7 @@ const CustomModal = ({ visible, onClose, onSubmit,  onDataUpdate , endpoint }) =
       protein,
       fat,
       carb,
+      user:userId
     };
 
     handleSubmitFood(newData)

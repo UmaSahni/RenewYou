@@ -190,21 +190,22 @@ def add_breakfast(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-        print(calories_str, "ccccc")
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user = request_data.get('user')
+        if None not in (calories_str, protein_str, carb_str, fat_str, user):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
                 carb = float(carb_str)
                 fat = float(fat_str)
-                
+                user_id = int(user)
                 meal = Meal.objects.create(
                     meal_type=meal_type,
                     name=name,
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user_id=user_id
                 )
                 return JsonResponse({'message': 'Breakfast added successfully'})
                 
@@ -224,21 +225,22 @@ def add_lunch(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-       
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user= request_data.get('user')
+        if None not in (calories_str, protein_str, carb_str, fat_str, user):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
                 carb = float(carb_str)
                 fat = float(fat_str)
-                
+                user_id = int(user)
                 meal = Meal.objects.create(
                     meal_type=meal_type,
                     name=name,
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user_id = user_id
                 )
                 return JsonResponse({'message': 'Lunch added successfully'})
                 
@@ -260,21 +262,22 @@ def add_dinner(request):
         protein_str = request_data.get('protein')
         carb_str = request_data.get('carb')
         fat_str = request_data.get('fat')
-      
-        if None not in (calories_str, protein_str, carb_str, fat_str):
+        user = request_data.get('user')
+        if None not in (calories_str, protein_str, carb_str, fat_str, user):
             try:
                 calories = float(calories_str)
                 protein = float(protein_str)
                 carb = float(carb_str)
                 fat = float(fat_str)
-                
+                user_id = int(user)
                 meal = Meal.objects.create(
                     meal_type=meal_type,
                     name=name,
                     calories=calories,
                     protein=protein,
                     carb=carb,
-                    fat=fat
+                    fat=fat,
+                    user_id = user_id
                 )
                 return JsonResponse({'message': 'Dinner added successfully'})
                 
