@@ -16,15 +16,22 @@ const MainBoard = ({onData}) => {
 
 // GET Data from Dashboard
   const fetchUpdatedData = () => {
-    fetch(URL)
-      .then((res) => res.json())
-      .then((data) => {
-        setFoodData(data);
-        setUpdatedFoodData(data)
-        // console.log(data); // Updated food data
-      })
-      .catch((err) => console.log(err));
-  };
+  fetch(URL)
+    .then((res) => {
+      if (!res) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then((data) => {
+      setFoodData(data);
+      setUpdatedFoodData(data);
+      // console.log(data); // Updated food data
+    })
+    .catch((err) => {
+      console.error('Error fetching data:', err);
+    });
+};
 
   useEffect(() => {
     fetchUpdatedData(); 

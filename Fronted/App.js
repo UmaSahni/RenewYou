@@ -18,8 +18,8 @@ export default function App() {
   const Stack = createStackNavigator();
   
   return (
-    <UserProfileProvider>
-    <FoodDataProvider>
+     <UserProfileProvider>
+     <FoodDataProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Home' >
         <Stack.Screen name="Signup" component={SignupScreen} />
@@ -33,8 +33,8 @@ export default function App() {
         {/* Other screens can be added here */}
       </Stack.Navigator>
     </NavigationContainer>
-    </FoodDataProvider>
-    </UserProfileProvider>
+     </FoodDataProvider>
+     </UserProfileProvider> 
   );
 }
 
