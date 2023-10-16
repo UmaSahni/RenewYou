@@ -15,7 +15,7 @@ const NutritionPlan = ({navigation}) => {
 
   // Click on START NUTRITION
   const startNutionPLan = () =>{
-    navigation.navigate("Dashboard")
+    navigation.navigate("AddFood")
   }
 
   return (

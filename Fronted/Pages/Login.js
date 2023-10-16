@@ -30,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
         setuserId(data.user_id); // Set the user ID in context
         Alert.alert("Login Success", "You have successfully logged in.");
         // Navigate to the desired screen
-        // navigation.navigate("Fitness");
+        navigation.navigate("Fitness");
       } else {
         const data = await response.json();
         Alert.alert("Login Failed", data.message);

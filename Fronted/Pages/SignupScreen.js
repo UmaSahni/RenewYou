@@ -22,7 +22,7 @@ const SignupScreen = () => {
       age: parseInt(age),
       sex,
     };
-
+    console.log(user)
     try {
       const response = await fetch("http://10.0.2.2:8000/register/", {
         method: "POST",
@@ -33,7 +33,9 @@ const SignupScreen = () => {
       });
 
        const data = await response.json();
-      if (response) {
+       console.log(data)
+       
+      if (data) {
         console.log("User registered successfully:", data.message);
         // You can navigate to another screen or perform other actions here
       } else {

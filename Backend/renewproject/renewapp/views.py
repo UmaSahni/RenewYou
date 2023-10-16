@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
 from .models import WaterIntake
 from django.db import models 
+from .models import CustomUser, CustomUserManager
+from django.contrib.auth.models import User
+
 
 User = get_user_model()
 
@@ -28,7 +31,6 @@ def user_registration(request):
             return JsonResponse({"message": "User registered successfully."}, status=201)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
-
 
 from .models import CustomUser  # Import your CustomUser model
 
@@ -379,7 +381,7 @@ def getwater(request):
     if request.method == 'GET':
         try:
             user_id = request.GET.get('user', None)  # Get the user_id from the query parameter
-
+            
             if user_id is not None:
                 # Calculate the total water intake for the user (assuming user_id is valid)
                 total_water = WaterIntake.objects.filter(user_id=user_id).aggregate(total=models.Sum('amount_ml'))['total'] or 0

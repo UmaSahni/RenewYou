@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 const MyComponent = ({ navigation }) => {
   return (
     <View style={styles.centeredImageContainer}>
-      <Image source={require("../assets/renew-logo-r.png")} />
+      <Image source={require("../assets/logo.png")} />
       <View style={styles.container}>
         <View style={styles.box}>
           <Image
@@ -39,6 +39,7 @@ const MyComponent = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <Text onPress={() => navigation.navigate("Profile")} >Profile</Text>
     </View>
   );
 };

@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { UserProfile } from "../Context/UserProfileContext";
 
@@ -13,8 +14,9 @@ function WaterIntake() {
   const [waterGlasses, setWaterGlasses] = useState(0);
   const [totalML, setTotalML] = useState(0);
   const [glass, setGlass] = useState(1);
-  
-  const {userId} = useContext(UserProfile)
+  const [loading, setLoading] = useState(false);
+
+  const { userId } = useContext(UserProfile);
   let URL = "http://10.0.2.2:8000/update-water-intake/";
   let GETURL = `http://10.0.2.2:8000/getwater/?user=${userId}`;
 
@@ -24,7 +26,7 @@ function WaterIntake() {
       .then((data) => {
         setTotalML(data.total_water_ml);
         setGlass(data.glasses);
-        setWaterGlasses(data.glasses); // Set waterGlasses based on data.glasses
+        setWaterGlasses(data.glasses);
       });
   };
 
@@ -32,9 +34,9 @@ function WaterIntake() {
     getWater();
   }, []);
 
-  // Function to handle the button click and update water intake
-
   const handleAddWater = () => {
+    setLoading(true);
+
     let obj = {
       user: userId,
       amount_ml: 100,
@@ -47,23 +49,27 @@ function WaterIntake() {
       },
       body: JSON.stringify(obj),
     })
+      .then((res) =>{ 
+       
+        res.json()})
       .then((res) => {
-        // console.log(res);
-        // Update the state to add another water glass
-        getWater()
+        console.log(res)
+        getWater();
         setWaterGlasses(waterGlasses + 1);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  // Function to render water glass images dynamically
   const renderWaterGlasses = () => {
     return Array.from({ length: glass }).map((_, index) => (
       <Image
         key={index}
-        source={require("../assets/water.png")} // Provide the path to your water glass image
+        source={require("../assets/water.png")}
         style={styles.waterGlass}
       />
     ));
@@ -71,9 +77,7 @@ function WaterIntake() {
 
   return (
     <View style={styles.container}>
-      {/* Display the current number of water glasses */}
       <Text>Water Intake: {glass} glasses</Text>
-      {/* Render the water glass images */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -81,11 +85,13 @@ function WaterIntake() {
       >
         {renderWaterGlasses()}
       </ScrollView>
-
-      {/* Button to add more water */}
-      <TouchableOpacity onPress={handleAddWater}>
-        <Text>+</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size="small" color="#0000ff" />
+      ) : (
+        <TouchableOpacity onPress={handleAddWater}>
+          <Text>+</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -97,12 +103,12 @@ const styles = StyleSheet.create({
   },
   waterGlassesContainer: {
     flexDirection: "row",
-    flexWrap: "wrap", // Allow glasses to wrap to the next line
+    flexWrap: "wrap",
   },
   waterGlass: {
     width: 50,
     height: 100,
-    margin: 5, // Add some margin between water glasses
+    margin: 5,
   },
 });
 
